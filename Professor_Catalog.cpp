@@ -1,10 +1,13 @@
 //
 // Created by Shazi Bidarian on 11/13/24.
 //
+#include "Professor_Catalog.h"
 #include <iostream>
-#include <vector>
+#include <ostream>
+#include <iostream>
 #include <string>
 using namespace std;
+
 
 class Professor_Catalog {
 private:
@@ -23,10 +26,3 @@ public:
 
 
 };
-
-int main()
-{
-
-
-    return 0;
-}

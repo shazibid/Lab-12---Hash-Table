@@ -1,0 +1,10 @@
+Professor Med Mogasemi added to catalog with course CS-1A.
+Professor Joe Bannet added to catalog with course CS-1A.
+Professor George Goodman added to catalog with course CS-3B.
+Professor Bob Badman added to catalog with course CS-1C.
+Professor Med Learn_as_he_teach added to catalog with course CS-
+1D.
+Professor Nadia The_Best added to catalog with course CS-1D.
+Professor Carlos Olive added to catalog with course CS-1B.
+Professor Homi The_Man added to catalog with course CS-1C.
+Course CS-1D added to Professor George Goodman's course list.
