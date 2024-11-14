@@ -1,18 +1,27 @@
 Med Mogasemi
 CS-1A
+4.5
 Joe Bannet
 CS-1A
+3.6
 George Goodman
 CS-3B
+5.0
 Bob Badman
 CS-1C
+4.2
 Med Learn_as_he_teach
 CS-1D
+3.9
 Nadia The_Best
 CS-1D
+4.7
 Carlos Olive
 CS-1B
+4.3
 Homi The_Man
-CS-1C.
+CS-1C
+4.7
 George Goodman
 CS-1D
+3.2

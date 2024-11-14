@@ -1,3 +1,9 @@
 # ninja log v6
-5	410	1731538650637316377	CMakeFiles/Lab_12___Hash_Table.dir/main.cpp.o	7783bc6f29e98ea4
-410	504	1731538651043051660	Lab_12___Hash_Table	a8e2b6131cff7207
+1	51	1731611239944697548	build.ninja	aad6bff4255ad3b2
+5	232	1731611146403916904	CMakeFiles/Lab_12___Hash_Table.dir/main.cpp.o	7783bc6f29e98ea4
+3	39	1731611227636063831	/Users/shazi/VS Code/Git/Lab-12---Hash-Table/Lab_12___Hash_Table	671d6a017d52a588
+243	283	1731611146642587293	Lab_12___Hash_Table	b08f5acea06cd2fa
+5	243	1731611146404316320	CMakeFiles/Lab_12___Hash_Table.dir/Professor_Catalog.cpp.o	e9cbfad232b74ad7
+0	43	1731611239944697548	build.ninja	aad6bff4255ad3b2
+4	211	1731611293252019220	CMakeFiles/Lab_12___Hash_Table.dir/main.cpp.o	7783bc6f29e98ea4
+211	249	1731611293459604758	Lab_12___Hash_Table	b08f5acea06cd2fa
