@@ -14,11 +14,11 @@ int main() {
     hashTable.display();
 
     // Search for a professor
-    cout << "\nSearching for John Doe:\n";
-    hashTable.search("John Doe");
+    cout << "\nSearching for Homi The_Man:\n";
+    hashTable.search("Homi The_Man");
 
-    cout << "\nSearching for Jane Smith:\n";
-    hashTable.search("Jane Smith");
+    cout << "\nSearching for Med Mogasemi:\n";
+    hashTable.search("Med Mogasemi");
 
     cout << "\nSearching for Michael Brown:\n";
     hashTable.search("Michael Brown");

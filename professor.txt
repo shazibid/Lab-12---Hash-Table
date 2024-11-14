@@ -25,3 +25,6 @@ CS-1C
 George Goodman
 CS-1D
 3.2
+Homi The_Man
+CS-1A
+4.7

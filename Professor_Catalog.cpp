@@ -24,7 +24,9 @@ void HashTable::readFromFile(const string& filename) {
         return;
     }
 
-    string name, courseID, line;
+    string name;
+    string courseID;
+    string line;
     double rating;
 
     while (getline(file, name)) {
