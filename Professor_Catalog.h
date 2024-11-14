@@ -8,6 +8,7 @@
 #include <string>
 using namespace std;
 
+//essentially is professor node
 class Professor_Catalog {
 private:
     string prof;    //this is our hashmap key
@@ -23,7 +24,8 @@ public:
 
     ~Professor_Catalog() {}
 
-
+    bool readFile(fstream& file, char* name);  //error catching
+    void writeFile(fstream& file, string& prof, string& courseName);   //inputs .txt data into file
 };
 
 
