@@ -4,16 +4,27 @@
 using namespace std;
 
 int main() {
-    Node* head = nullptr;
-    string filename = "/Users/shazi/VS Code/Git/Lab-12---Hash-Table/professor.txt";
+    HashTable hashTable(10);
+    string Prof_Catalog = "/Users/shazi/VS Code/Git/Lab-12---Hash-Table/professor.txt";
 
-    readFromFile(head, filename);
+    hashTable.readFromFile(Prof_Catalog);
 
-    cout << "List of Professors:" << endl;
-    displayProfs(head);
+    // Display the contents of the hash table
+    cout << "Hash Table Contents:\n";
+    hashTable.display();
 
-    // Free the allocated memory
-    deleteList(head);
+    // Search for a professor
+    cout << "\nSearching for John Doe:\n";
+    hashTable.search("John Doe");
+
+    cout << "\nSearching for Jane Smith:\n";
+    hashTable.search("Jane Smith");
+
+    cout << "\nSearching for Michael Brown:\n";
+    hashTable.search("Michael Brown");
+
+    cout << "\nSearching for Alice Johnson:\n";
+    hashTable.search("Alice Johnson");
 
     return 0;
 }

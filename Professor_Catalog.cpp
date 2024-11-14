@@ -2,82 +2,111 @@
 
 using namespace std;
 
-// Creates a new node
-Node* newProf(const Professor& prof) {
-    Node* newNode = new Node;
-    newNode->data = prof;
-    newNode->next = nullptr;
-    return newNode;
-}
+int HashTable::hashFunction(const string& key) const {
+    int hashValue = 0;
+    int p = 31;
+    int mod = 1e9 + 7;
 
-// Inserts nodes into linked list
-void insert(Node*& head, const Professor& prof) {
-    Node* newNode = newProf(prof);
-    if (head == nullptr) {
-        head = newNode;
-    } else {
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
+    for (char c : key) {
+        char lowerChar = tolower(c);
+        hashValue = (hashValue * p + (lowerChar - 'a' + 1)) % mod;
     }
+
+    return hashValue % size;
 }
 
-// Reads .txt file and enters professor data
-void readFromFile(Node*& head, const string& filename) {
+// Reads professor data from a file
+void HashTable::readFromFile(const string& filename) {
     ifstream file(filename);
+
     if (!file.is_open()) {
-        cout << "Error opening file.\n";
+        cout << "Error opening file: " << filename << "\n";
         return;
     }
 
-    string line;
-    while (getline(file, line)) {
-        Professor prof;
-        prof.name = line;
+    string name, courseID, line;
+    double rating;
 
-        if (!getline(file, prof.courseID)) {
-            cout << "Error reading courseID from file.\n";
-            break;
-        }
+    while (getline(file, name)) {
+        if (name.empty()) continue;
 
-        if (!getline(file, line)) {
-            cout << "Error reading rating from file.\n";
-            break;
-        }
-
-        try {
-            prof.rating = stod(line);
-        } catch (const invalid_argument& e) {
-            cout << "Error converting rating to double. Invalid input: " << line << endl;
+        if (!getline(file, courseID)) {
+            cout << "Error reading courseID from file. Skipping entry.\n";
             continue;
         }
 
-        insert(head, prof);
+        if (!getline(file, line)) {
+            cout << "Error reading rating from file. Skipping entry.\n";
+            continue;
+        }
+
+        try {
+            rating = stod(line);
+        } catch (const invalid_argument& e) {
+            cout << "Invalid rating format: " << line << ". Skipping entry.\n";
+            continue;
+        }
+
+        // Insert the data into the hash table
+        insert(name, courseID, rating);
     }
 
     file.close();
 }
 
-// Displays the linked list
-void displayProfs(Node* head) {
-    Node* temp = head;
-    while (temp) {
-        cout << "Professor: " << temp->data.name << endl;
-        cout << "Course: " << temp->data.courseID << endl;
-        cout << "Rating: " << temp->data.rating << endl;
-        cout << "--------------------------" << endl;
-        temp = temp->next;
+// Inserts a professor's course into the hash table
+void HashTable::insert(const string& profName, const string& courseID, double rating) {
+    int index = hashFunction(profName);
+
+    // Search for the professor in the chain at this index
+    for (auto& entry : table[index]) {
+        if (entry.name == profName) {
+            // If professor exists, add the course (rating remains the same)
+            entry.courses.push_back(courseID);
+            return;
+        }
+    }
+
+    // If professor not found, create a new entry
+    Professor newEntry = {profName, rating, {courseID}};
+    table[index].push_back(newEntry);
+}
+
+// Displays the contents of the hash table
+void HashTable::display() const {
+    for (int i = 0; i < size; ++i) {
+        if (!table[i].empty()) {
+            cout << "Index " << i << ":\n";
+            for (const auto& entry : table[i]) {
+                cout << "  Professor: " << entry.name << "\n";
+                cout << "  Rating: " << entry.rating << "\n";
+                cout << "  Courses: ";
+                for (const auto& course : entry.courses) {
+                    cout << course << " ";
+                }
+                cout << "\n";
+            }
+        }
     }
 }
 
-// Deletes the entire linked list to free memory
-void deleteList(Node*& head) {
-    Node* temp;
-    while (head != nullptr) {
-        temp = head;
-        head = head->next;
-        delete temp;
+// Searches for a professor by name and displays their information
+void HashTable::search(const string& profName) const {
+    int index = hashFunction(profName);
+
+    // Search for the professor in the chain
+    for (const auto& entry : table[index]) {
+        if (entry.name == profName) {
+            cout << "Professor: " << profName << "\n";
+            cout << "Rating: " << entry.rating << "\n";
+            cout << "Courses: ";
+            for (const auto& course : entry.courses) {
+                cout << course << " ";
+            }
+            cout << "\n";
+            return;
+        }
     }
+
+    cout << "Professor " << profName << " not found.\n";
 }

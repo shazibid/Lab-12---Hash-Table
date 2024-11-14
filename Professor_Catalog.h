@@ -3,28 +3,36 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <fstream>
 
 using namespace std;
 
-// Professor data struct
+// Struct for storing professor information
 struct Professor {
     string name;
-    string courseID;
     double rating;
+    vector<string> courses; // List of courses
 };
 
-// Node struct for linked list
-struct Node {
-    Professor data;
-    Node* next;
-};
+// Hash table class
+class HashTable {
+private:
+    vector<vector<Professor>> table;
+    int size;
 
-// Function prototypes
-Node* newProf(const Professor& prof);
-void insert(Node*& head, const Professor& prof);
-void readFromFile(Node*& head, const string& filename);
-void displayProfs(Node* head);
-void deleteList(Node*& head); // Free allocated memory
+    // Hash function for strings
+    int hashFunction(const string& key) const;
+
+public:
+    HashTable(int s) : size(s) {
+        table.resize(size);
+    }
+
+    void readFromFile(const string& filename);
+    void insert(const string& profName, const string& courseID, double rating);
+    void display() const;
+    void search(const string& profName) const;
+};
 
 #endif // PROFESSOR_CATALOG_H
