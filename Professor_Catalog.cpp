@@ -5,7 +5,7 @@ using namespace std;
 int HashTable::hashFunction(const string& key) const {
     int hashValue = 0;
     int p = 31;
-    int mod = 1e9 + 7;
+    int mod = 10;
 
     for (char c : key) {
         char lowerChar = tolower(c);
