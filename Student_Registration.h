@@ -31,8 +31,8 @@ struct Student {
 public:
     StudentTable(); // Constructor
     void add(int studentID, const string& courseName, const string& professorName, const vector<string>& professors); // Vector - professors for each course (to output to the options)
-    void verify(int studentID);
-    void checkRegistration(int studentID, const string& courseName, const string& professorName) const;
+    void validateStudentID(int studentID);
+    void checkRegistration() const;
     void displayRegistrations(int studentID) const;
 };
 
