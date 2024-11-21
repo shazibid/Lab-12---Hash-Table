@@ -13,8 +13,8 @@ StudentTable::StudentTable()
 void StudentTable::add(int studentID, const string &courseName, const string &professorName)
 {
     int index = hashFunction( studentID);
-
-    if 
+    vaidateStudentID(studentID);
+    
 
 
 }
@@ -35,7 +35,7 @@ void StudentTable::validateStudentID(string studentID)
         // check if c is not a digit using ASCII
         if (c < '0' || c > '9') {
             cout << "Invalid ID. ID must only contain digits." << endl;
-            return;
+            return NULL;
         }
         // Subtract ASCII values from '0' to c
         // ex: c = 2
