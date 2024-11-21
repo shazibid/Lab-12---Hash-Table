@@ -3,16 +3,15 @@
 using namespace std;
 
 int HashTable::hashFunction(const string& key) const {
-    int hashValue = 0;
-    int p = 31;
-    int mod = 10;
+    int hash{};
+    int p = 7;
 
-    for (char c : key) {
-        char lowerChar = tolower(c);
-        hashValue = (hashValue * p + (lowerChar - 'a' + 1)) % mod;
+    for (int i = 0; i < key.length(); i++) {
+        int asciivalue = (hash + int(key[i]));
+        hash = (hash + asciivalue * 23) % p;
     }
 
-    return hashValue % size;
+    return hash;
 }
 
 // Reads professor data from a file
@@ -30,7 +29,9 @@ void HashTable::readFromFile(const string& filename) {
     double rating;
 
     while (getline(file, name)) {
-        if (name.empty()) continue;
+        if (name.empty()) {
+            continue;
+        }
 
         if (!getline(file, courseID)) {
             cout << "Error reading courseID from file. Skipping entry.\n";
@@ -45,7 +46,7 @@ void HashTable::readFromFile(const string& filename) {
         try {
             rating = stod(line);
         } catch (const invalid_argument& e) {
-            cout << "Invalid rating format: " << line << ". Skipping entry.\n";
+            cout << "Invalid rating format. Skipping entry.\n";
             continue;
         }
 
@@ -70,7 +71,7 @@ void HashTable::insert(const string& profName, const string& courseID, double ra
     }
 
     // If professor not found, create a new entry
-    Professor newEntry = {profName, rating, {courseID}};
+    Professor newEntry = {profName, {courseID}, rating};
     table[index].push_back(newEntry);
 }
 
@@ -93,18 +94,17 @@ void HashTable::display() const {
 }
 
 // Searches for a professor by name and displays their information
-void HashTable::search(const string& profName) const {
-    int index = hashFunction(profName);
+void HashTable::search(string& profName) const {
+    int index = hashFunction(profName); // this is the hash
 
     // Search for the professor in the chain
-    for (const auto& entry : table[index]) {
-        if (entry.name == profName) {
-            cout << "Professor: " << profName << "\n";
-            cout << "Rating: " << entry.rating << "\n";
-            cout << "Courses: ";
-            for (const auto& course : entry.courses) {
-                cout << course << " ";
+    for (const auto& prof : table[index]) {
+        if (prof.name == profName) {
+            cout << "\nCourses taught by Professor " << prof.name << ":\n";
+            for (const auto& course : prof.courses) {
+                cout << course << "\n";
             }
+            cout << "Rating: " << prof.rating << "\n";
             cout << "\n";
             return;
         }

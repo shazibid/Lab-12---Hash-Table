@@ -11,8 +11,8 @@ using namespace std;
 // Struct for storing professor information
 struct Professor {
     string name;
-    double rating;
     vector<string> courses; // List of courses
+    double rating;
 };
 
 // Hash table class
@@ -32,7 +32,7 @@ public:
     void readFromFile(const string& filename);
     void insert(const string& profName, const string& courseID, double rating);
     void display() const;
-    void search(const string& profName) const;
+    void search( string& profName) const;
 };
 
 #endif // PROFESSOR_CATALOG_H

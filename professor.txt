@@ -28,3 +28,6 @@ CS-1D
 Homi The_Man
 CS-1A
 4.7
+Med Mogasemi
+CS-1D
+3.0

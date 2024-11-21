@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Professor_Catalog.h"
+#include "Menu.cpp"
 
 using namespace std;
 
@@ -8,23 +9,11 @@ int main() {
     string Prof_Catalog = "/Users/shazi/VS Code/Git/Lab-12---Hash-Table/professor.txt";
 
     hashTable.readFromFile(Prof_Catalog);
+    hashTable.insert("Dr. Smith", "Data Structures", 4.5);
 
-    // Display the contents of the hash table
-    cout << "Hash Table Contents:\n";
-    hashTable.display();
+    int choice;
 
-    // Search for a professor
-    cout << "\nSearching for Homi The_Man:\n";
-    hashTable.search("Homi The_Man");
-
-    cout << "\nSearching for Med Mogasemi:\n";
-    hashTable.search("Med Mogasemi");
-
-    cout << "\nSearching for Michael Brown:\n";
-    hashTable.search("Michael Brown");
-
-    cout << "\nSearching for Alice Johnson:\n";
-    hashTable.search("Alice Johnson");
+    showMenu(choice, hashTable);
 
     return 0;
 }
