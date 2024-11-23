@@ -9,33 +9,34 @@ void showMenu(HashTable& hashTable);
 void registerChoice(HashTable& hashTable);
 void checkChoice(HashTable& hashTable);
 void searchChoice(HashTable& hashTable);
-void exitChoice(HashTable& hashTable);
+void exitChoice();
 
-void showMenu(int choice, HashTable& hashTable) {
-    cout << "Enter an action (1: register, 2: check, 3: search, 4: exit): ";
-    cin >> choice;
+void showMenu(HashTable& hashTable) {
+    int choice;
 
-    while (choice < 1 || choice > 4) {
-        cout << "Invalid Choice. Try Again: ";
+    while (true) {
+        cout << "Enter an action (1: register, 2: check, 3: search, 4: exit): ";
         cin >> choice;
-    }
 
-    switch (choice) {
-        case 1:
-            registerChoice(hashTable);
-            showMenu(choice, hashTable);
-            break;
-        case 2:
-            checkChoice(hashTable);
-            showMenu(choice, hashTable);
-            break;
-        case 3:
-            searchChoice(hashTable);
-            showMenu(choice, hashTable);
-            break;
-        case 4:
-            exitChoice(hashTable);
-            break;
+        while (choice < 1 || choice > 4) {
+            cout << "Invalid Choice. Try Again: ";
+            cin >> choice;
+        }
+
+        switch (choice) {
+            case 1:
+                //registerChoice(hashTable);
+                break;
+            case 2:
+                //checkChoice(hashTable);
+                break;
+            case 3:
+                searchChoice(hashTable);
+                break;
+            case 4:
+                exitChoice();
+                break;
+        }
     }
 }
 
@@ -58,6 +59,7 @@ void searchChoice(HashTable& hashTable) {
     hashTable.search(profName);
 }
 
-void exitChoice(HashTable& hashTable) {
+void exitChoice() {
     cout << "Thank you.\n";
+    exit(0);
 }

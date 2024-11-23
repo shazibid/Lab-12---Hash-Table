@@ -11,9 +11,7 @@ int main() {
     hashTable.readFromFile(Prof_Catalog);
     hashTable.insert("Dr. Smith", "Data Structures", 4.5);
 
-    int choice;
-
-    showMenu(choice, hashTable);
+    showMenu(hashTable);
 
     return 0;
 }
