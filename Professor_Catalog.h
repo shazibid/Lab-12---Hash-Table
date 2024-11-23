@@ -16,23 +16,23 @@ struct Professor {
 };
 
 // Hash table class
-class HashTable {
+class ProfessorTable {
 private:
-    vector<vector<Professor>> table;
+    vector<vector<Professor>> profTable;
     int size;
 
     // Hash function for strings
     int hashFunction(const string& key) const;
 
 public:
-    HashTable(int s) : size(s) {
-        table.resize(size);
+    ProfessorTable(int s) : size(s) {
+        profTable.resize(size);
     }
 
     void readFromFile(const string& filename);
     void insert(const string& profName, const string& courseID, double rating);
     void display() const;
-    void search( string& profName) const;
+    void search(string& profName) const;
 };
 
 #endif // PROFESSOR_CATALOG_H

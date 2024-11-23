@@ -5,13 +5,13 @@
 #include "Professor_Catalog.h"
 using namespace std;
 
-void showMenu(HashTable& hashTable);
-void registerChoice(HashTable& hashTable);
-void checkChoice(HashTable& hashTable);
-void searchChoice(HashTable& hashTable);
+void showMenu(ProfessorTable& hashTable);
+void registerChoice(ProfessorTable& hashTable);
+void checkChoice(ProfessorTable& hashTable);
+void searchChoice(ProfessorTable& hashTable);
 void exitChoice();
 
-void showMenu(HashTable& hashTable) {
+void showMenu(ProfessorTable& hashTable) {
     int choice;
 
     while (true) {
@@ -25,10 +25,10 @@ void showMenu(HashTable& hashTable) {
 
         switch (choice) {
             case 1:
-                //registerChoice(hashTable);
+                registerChoice(hashTable);
                 break;
             case 2:
-                //checkChoice(hashTable);
+                checkChoice(hashTable);
                 break;
             case 3:
                 searchChoice(hashTable);
@@ -40,15 +40,15 @@ void showMenu(HashTable& hashTable) {
     }
 }
 
-void registerChoice(HashTable& hashTable) {
+void registerChoice(ProfessorTable& hashTable) {
 
 }
 
-void checkChoice(HashTable& hashTable) {
+void checkChoice(ProfessorTable& hashTable) {
 
 }
 
-void searchChoice(HashTable& hashTable) {
+void searchChoice(ProfessorTable& hashTable) {
     string profName;
     hashTable.display();
 

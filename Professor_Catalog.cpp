@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int HashTable::hashFunction(const string& key) const {
+int ProfessorTable::hashFunction(const string& key) const {
     int hash{};
     int p = 7;
 
@@ -15,7 +15,7 @@ int HashTable::hashFunction(const string& key) const {
 }
 
 // Reads professor data from a file
-void HashTable::readFromFile(const string& filename) {
+void ProfessorTable::readFromFile(const string& filename) {
     ifstream file(filename);
 
     if (!file.is_open()) {
@@ -58,11 +58,11 @@ void HashTable::readFromFile(const string& filename) {
 }
 
 // Inserts a professor's course into the hash table
-void HashTable::insert(const string& profName, const string& courseID, double rating) {
+void ProfessorTable::insert(const string& profName, const string& courseID, double rating) {
     int index = hashFunction(profName);
 
     // Search for the professor in the chain at this index
-    for (auto& entry : table[index]) {
+    for (auto& entry : profTable[index]) {
         if (entry.name == profName) {
             // If professor exists, add the course (rating remains the same)
             entry.courses.push_back(courseID);
@@ -72,15 +72,15 @@ void HashTable::insert(const string& profName, const string& courseID, double ra
 
     // If professor not found, create a new entry
     Professor newEntry = {profName, {courseID}, rating};
-    table[index].push_back(newEntry);
+    profTable[index].push_back(newEntry);
 }
 
 // Displays the contents of the hash table
-void HashTable::display() const {
+void ProfessorTable::display() const {
     for (int i = 0; i < size; ++i) {
-        if (!table[i].empty()) {
+        if (!profTable[i].empty()) {
             cout << "Index " << i << ":\n";
-            for (const auto& entry : table[i]) {
+            for (const auto& entry : profTable[i]) {
                 cout << "  Professor: " << entry.name << "\n";
                 cout << "  Rating: " << entry.rating << "\n";
                 cout << "  Courses: ";
@@ -94,11 +94,11 @@ void HashTable::display() const {
 }
 
 // Searches for a professor by name and displays their information
-void HashTable::search(string& profName) const {
+void ProfessorTable::search(string& profName) const {
     int index = hashFunction(profName); // this is the hash
 
     // Search for the professor in the chain
-    for (const auto& prof : table[index]) {
+    for (const auto& prof : profTable[index]) {
         if (prof.name == profName) {
             cout << "\nCourses taught by Professor " << prof.name << ":\n";
             for (const auto& course : prof.courses) {

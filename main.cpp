@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    HashTable hashTable(10);
+    ProfessorTable hashTable(10);
     string Prof_Catalog = "/Users/shazi/VS Code/Git/Lab-12---Hash-Table/professor.txt";
 
     hashTable.readFromFile(Prof_Catalog);
