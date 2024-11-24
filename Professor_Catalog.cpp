@@ -3,15 +3,22 @@
 using namespace std;
 
 int ProfessorTable::hashFunction(const string& key) const {
-    int hash{};
-    int p = 7;
-
-    for (int i = 0; i < key.length(); i++) {
-        int asciivalue = (hash + int(key[i]));
-        hash = (hash + asciivalue * 23) % p;
+    int hash = 0;
+    for (char ch : key) {
+        int asciivalue = static_cast<int>(ch);
+        hash = (hash + asciivalue * 23) % size; // Ensure index is within bounds
     }
 
-    return hash;
+    return hash >= 0 ? hash : hash + size; // Handle negative hash values
+}
+
+int ProfessorTable::findCourseIndex(const string& courseID) const {
+    for (int i = 0; i < courseTable.size(); i++) { // Loop over valid range
+        if (courseTable[i].courseID == courseID) {
+            return i;
+        }
+    }
+    return -1; // Return -1 if course not found
 }
 
 // Reads professor data from a file
@@ -73,6 +80,14 @@ void ProfessorTable::insert(const string& profName, const string& courseID, doub
     // If professor not found, create a new entry
     Professor newEntry = {profName, {courseID}, rating};
     profTable[index].push_back(newEntry);
+
+    int courseIndex = findCourseIndex(courseID);
+    if (courseIndex == -1) {
+        Course newCourse = {courseID, {{profName, rating}}};
+        courseTable.push_back(newCourse);
+    } else {
+        courseTable[courseIndex].profs.push_back({profName, rating});
+    }
 }
 
 // Displays the contents of the hash table
@@ -94,12 +109,13 @@ void ProfessorTable::display() const {
 }
 
 // Searches for a professor by name and displays their information
-void ProfessorTable::search(string& profName) const {
-    int index = hashFunction(profName); // this is the hash
+void ProfessorTable::search(string& key) const {
+    system("clear");
+    int index = hashFunction(key); // this is the hash
 
     // Search for the professor in the chain
     for (const auto& prof : profTable[index]) {
-        if (prof.name == profName) {
+        if (prof.name == key) {
             cout << "\nCourses taught by Professor " << prof.name << ":\n";
             for (const auto& course : prof.courses) {
                 cout << course << "\n";
@@ -110,5 +126,16 @@ void ProfessorTable::search(string& profName) const {
         }
     }
 
-    cout << "Professor " << profName << " not found.\n";
+    int courseIndex = findCourseIndex(key);
+    if (courseIndex != -1) {
+        cout << "\nCourse: " << key << "\n";
+        cout << "Professors teaching this course:\n";
+        for (const auto& [profName, rating] : courseTable[courseIndex].profs) {
+            cout << "  Professor: " << profName << "\n";
+            cout << "  Rating: " << rating << "\n";
+        }
+        return;
+    }
+
+    cout << "No course or professor found.\n";
 }

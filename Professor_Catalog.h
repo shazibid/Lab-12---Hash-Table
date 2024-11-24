@@ -15,14 +15,22 @@ struct Professor {
     double rating;
 };
 
+struct Course {
+    string courseID;
+    vector<pair<string, double>> profs;
+};
+
 // Hash table class
 class ProfessorTable {
 private:
     vector<vector<Professor>> profTable;
+    vector<Course> courseTable;
     int size;
 
     // Hash function for strings
     int hashFunction(const string& key) const;
+
+    int findCourseIndex(const string& courseID) const;
 
 public:
     ProfessorTable(int s) : size(s) {
