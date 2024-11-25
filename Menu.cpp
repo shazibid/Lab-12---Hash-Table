@@ -40,12 +40,12 @@ void showMenu(ProfessorTable& hashTable) {
     }
 }
 
-void registerChoice(ProfessorTable& hashTable) {
-
+void registerChoice(ProfessorTable& hashTable, StudentTable& studentTable) {
+    studentTable.add();
 }
 
-void checkChoice(ProfessorTable& hashTable) {
-
+void checkChoice(StudentTable& studentTable) {
+    studentTable.checkRegistration();
 }
 
 void searchChoice(ProfessorTable& hashTable) {
