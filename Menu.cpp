@@ -6,9 +6,10 @@
 using namespace std;
 
 void showMenu(ProfessorTable& hashTable);
-void registerChoice(ProfessorTable& hashTable);
-void checkChoice(ProfessorTable& hashTable);
+void registerChoice(ProfessorTable& hashTable, StudentTable& studentTable);
+void checkChoice(StudentTable& studentTable);
 void searchChoice(ProfessorTable& hashTable);
+void rateProf(StudentTable& studentTable);
 void exitChoice();
 
 void showMenu(ProfessorTable& hashTable) {
