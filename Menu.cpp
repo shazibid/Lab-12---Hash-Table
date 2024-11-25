@@ -15,25 +15,27 @@ void showMenu(ProfessorTable& hashTable) {
     int choice;
 
     while (true) {
-        cout << "Enter an action (1: register, 2: check, 3: search, 4: exit): ";
+        cout << "Enter an action (1: register, 2: check, 3: search, 4: rate, 5:exit): ";
         cin >> choice;
 
-        while (choice < 1 || choice > 4) {
+        while (choice < 1 || choice > 5) {
             cout << "Invalid Choice. Try Again: ";
             cin >> choice;
         }
 
         switch (choice) {
             case 1:
-                registerChoice(hashTable);
+                registerChoice(hashTable, studentTable);
                 break;
             case 2:
-                checkChoice(hashTable);
+                checkChoice(studentTable);
                 break;
             case 3:
                 searchChoice(hashTable);
                 break;
             case 4:
+                rateProf(studentTable);
+            case 5:
                 exitChoice();
                 break;
         }
@@ -57,6 +59,10 @@ void searchChoice(ProfessorTable& hashTable) {
     getline(cin, profName);
 
     hashTable.search(profName);
+}
+
+void rateProf(StudentTable& studentTable){
+    studentTable.rateProfessor();
 }
 
 void exitChoice() {
