@@ -27,12 +27,13 @@ using namespace std;
 
 // ==== Professor Struct =======================================================
 // Structure to store information about a professor, including their name, a
-// list of courses they teach, and their rating.
+// list of courses they teach, and their rating, number of ratings.
 // =============================================================================
 struct Professor {
     string name;               // Professor's name
     vector<string> courses;    // List of courses taught by the professor
     double rating;             // Professor's rating
+    int numRatings;
 };
 
 // ==== Course Struct ==========================================================
@@ -56,15 +57,13 @@ struct Course {
 // - void display() const: Displays all professor records in the catalog.
 // - void search(string& profName) const: Searches for a professor by name and
 //   displays their details.
-//
-// Private Methods:
 // - int hashFunction(const string& key) const: Hash function to compute the
 //   index for a given string key.
 // - int findCourseIndex(const string& courseID) const: Helper function to find
 //   the index of a course in the course table.
 // =============================================================================
 class ProfessorTable {
-private:
+public:
     vector<vector<Professor>> profTable; // Hash table for professors
     vector<Course> courseTable;         // Table for courses
     int size;                           // Size of the hash table
@@ -75,7 +74,6 @@ private:
     // Helper function to find the index of a course
     int findCourseIndex(const string& courseID) const;
 
-public:
     // Constructor to initialize the hash table
     ProfessorTable(int s) : size(s) {
         profTable.resize(size);
@@ -85,7 +83,7 @@ public:
     void readFromFile(const string& filename);
 
     // Inserts a new professor record into the hash table
-    void insert(const string& profName, const string& courseID, double rating);
+    void insert(const string& profName, const string& courseID, double rating, int numRatings);
 
     // Displays all professor records in the catalog
     void display() const;

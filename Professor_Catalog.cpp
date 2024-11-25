@@ -1,43 +1,18 @@
-// =============================================================================
-// File: Professor_Catalog.cpp
-// =============================================================================
-// Programmer: Shazi Bidarian
-// Class: CS 1D
-// Instructor: Med Mogasemi
-// =============================================================================
-// Program: Professor Catalog (Implementation File)
-// =============================================================================
-// Description:
-// This implementation file defines the methods for the `ProfessorTable` class,
-// which manages a hash table for storing professor and course information. The
-// hash table uses separate chaining to handle collisions, ensuring efficient
-// storage and retrieval. The class includes functions to read data from a file,
-// insert new records, display the catalog, and search for professors or courses.
-// =============================================================================
-
 #include "Professor_Catalog.h"
+
 using namespace std;
 
-// ==== hashFunction ===========================================================
-// Hash function to compute the index for a given string key.
-//
-// Explanation:
-// - A hash function converts a key (string) into an index in the hash table.
-// - This index determines where the data is stored in the table.
-// - Collisions (when two keys hash to the same index) are handled by chaining.
-// =============================================================================
 int ProfessorTable::hashFunction(const string& key) const {
-    int hash = 0;
+    int hash{};
+    int p = 7;
 
-    // Iterate over each character in the key to compute the hash value
-    for (char ch : key) {
-        int asciivalue = static_cast<int>(ch);       // Convert character to ASCII value
-        hash = (hash + asciivalue * 23) % size;      // Multiply by prime number, mod table size
+    for (int i = 0; i < key.length(); i++) {
+        int asciivalue = (hash + int(key[i]));
+        hash = (hash + asciivalue * 23) % p;
     }
 
-    return hash >= 0 ? hash : hash + size;           // Ensure the hash is non-negative
+    return hash;
 }
-
 // ==== findCourseIndex ========================================================
 // Helper function to find the index of a course in the course table.
 //
@@ -54,53 +29,56 @@ int ProfessorTable::findCourseIndex(const string& courseID) const {
     return -1;                                      // Return -1 if not found
 }
 
-// ==== readFromFile ===========================================================
-// Reads professor and course data from a file and populates the hash table.
-//
-// Logic:
-// - For each professor entry in the file, read their name, course, and rating.
-// - Use the `insert` function to add the data into the hash table and course table.
-// - If the data is invalid, skip that entry and display an error message.
-// =============================================================================
-void ProfessorTable::readFromFile(const string& filename) {
-    ifstream file(filename);                         // Open the file
+// Reads professor data from a file
+/////////////////UPDATED -  GIVEN BY CHATGPT IT WAS NOT READING PROPERLY WHEN GOING THROUGH HASH////////////////
+void ProfessorTable::readFromFile(const std::string& filename) {
+    ifstream file(filename);
 
-    if (!file.is_open()) {                           // Check if the file opened successfully
+    if (!file.is_open()) {
         cout << "Error opening file: " << filename << "\n";
         return;
     }
 
-    string name, courseID, line;
+    string name;
+    string courseID;
+    string line;
     double rating;
+    int numRatings;
 
-    // Read the file line by line
-    while (getline(file, name)) {
-        if (name.empty()) {                          // Skip empty lines
-            continue;
-        }
+    while (std::getline(file, name)) {
+        if (name.empty()) continue; // Skip empty lines
 
-        if (!getline(file, courseID)) {             // Read courseID, skip if missing
-            cout << "Error reading courseID. Skipping entry.\n";
-            continue;
-        }
+        getline(file, courseID);
+        getline(file, line);
 
-        if (!getline(file, line)) {                 // Read rating, skip if missing
-            cout << "Error reading rating. Skipping entry.\n";
-            continue;
-        }
-
+        // Parse rating
         try {
-            rating = stod(line);                    // Convert rating to double
-        } catch (const invalid_argument&) {         // Handle invalid rating format
-            cout << "Invalid rating format. Skipping entry.\n";
+            rating = stod(line);
+        } catch (const invalid_argument& e) {
+          cout << "Invalid rating format. Skipping entry.\n";
             continue;
         }
 
-        insert(name, courseID, rating);             // Insert the data into the hash table
+        // Parse numRatings (additional line in the file)
+        getline(file, line);
+        try {
+            numRatings = stoi(line);
+        } catch (const invalid_argument& e) {
+           cout << "Invalid number of ratings format. Skipping entry.\n";
+            continue;
+        }
+
+        // Clean up trailing spaces/newlines
+        name = name.substr(0, name.find_last_not_of(" \n\r\t") + 1);
+        courseID = courseID.substr(0, courseID.find_last_not_of(" \n\r\t") + 1);
+
+        // Insert cleaned values
+        insert(name, courseID, rating, numRatings);
     }
 
-    file.close();                                   // Close the file
+    file.close();
 }
+
 
 // ==== insert =================================================================
 // Inserts a professor's course and rating into the hash table.
@@ -111,7 +89,7 @@ void ProfessorTable::readFromFile(const string& filename) {
 // - If found, update their course list; if not, add a new entry to the chain.
 // - Update the `courseTable` to include the professor's rating for the course.
 // =============================================================================
-void ProfessorTable::insert(const string& profName, const string& courseID, double rating) {
+void ProfessorTable::insert(const string& profName, const string& courseID, double rating, int numRatings) {
     int index = hashFunction(profName);             // Compute the hash index
 
     // Search for the professor in the chain
@@ -123,7 +101,7 @@ void ProfessorTable::insert(const string& profName, const string& courseID, doub
     }
 
     // Create a new professor entry if not found
-    Professor newEntry = {profName, {courseID}, rating};
+    Professor newEntry = {profName, {courseID}, rating, numRatings};
     profTable[index].push_back(newEntry);           // Add to the chain
 
     // Update the courseTable
@@ -135,23 +113,16 @@ void ProfessorTable::insert(const string& profName, const string& courseID, doub
         courseTable[courseIndex].profs.push_back({profName, rating});
     }
 }
-
-// ==== display ================================================================
-// Displays the contents of the professor hash table.
-//
-// Logic:
-// - Iterate through each index in the hash table.
-// - For each non-empty index, print the professors and their courses.
-// =============================================================================
+// Displays the contents of the hash table
 void ProfessorTable::display() const {
-    for (int i = 0; i < size; ++i) {                // Traverse each index in the hash table
-        if (!profTable[i].empty()) {                // If the chain at this index is non-empty
+    for (int i = 0; i < size; ++i) {
+        if (!profTable[i].empty()) {
             cout << "Index " << i << ":\n";
-            for (const auto& entry : profTable[i]) { // Traverse the chain
+            for (const auto& entry : profTable[i]) {
                 cout << "  Professor: " << entry.name << "\n";
                 cout << "  Rating: " << entry.rating << "\n";
                 cout << "  Courses: ";
-                for (const auto& course : entry.courses) { // Print each course
+                for (const auto& course : entry.courses) {
                     cout << course << " ";
                 }
                 cout << "\n";
