@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <utility>
 
 using namespace std;
 
@@ -66,19 +67,17 @@ struct Course {
 class ProfessorTable {
 private:
     vector<vector<Professor>> profTable; // Hash table for professors
-    vector<Course> courseTable;         // Table for courses
+    vector<vector<Course>> courseTable;         // Table for courses
     int size;                           // Size of the hash table
 
     // Hash function for strings
     int hashFunction(const string& key) const;
 
-    // Helper function to find the index of a course
-    int findCourseIndex(const string& courseID) const;
-
 public:
     // Constructor to initialize the hash table
     ProfessorTable(int s) : size(s) {
         profTable.resize(size);
+        courseTable.resize(size);
     }
 
     // Reads professor data from a file

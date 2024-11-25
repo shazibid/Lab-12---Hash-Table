@@ -30,28 +30,12 @@ int ProfessorTable::hashFunction(const string& key) const {
     int hash = 0;
 
     // Iterate over each character in the key to compute the hash value
-    for (char ch : key) {
-        int asciivalue = static_cast<int>(ch);       // Convert character to ASCII value
-        hash = (hash + asciivalue * 23) % size;      // Multiply by prime number, mod table size
+    for (char ch: key) {
+        int asciivalue = static_cast<int>(ch); // Convert character to ASCII value
+        hash = (hash + asciivalue * 23) % size; // Multiply by prime number, mod table size
     }
 
-    return hash >= 0 ? hash : hash + size;           // Ensure the hash is non-negative
-}
-
-// ==== findCourseIndex ========================================================
-// Helper function to find the index of a course in the course table.
-//
-// Logic:
-// - Loop through the `courseTable` to find a course that matches `courseID`.
-// - Return the index if found; otherwise, return -1 to indicate not found.
-// =============================================================================
-int ProfessorTable::findCourseIndex(const string& courseID) const {
-    for (int i = 0; i < courseTable.size(); i++) {   // Traverse the courseTable vector
-        if (courseTable[i].courseID == courseID) {  // Check if courseID matches
-            return i;                               // Return the index if found
-        }
-    }
-    return -1;                                      // Return -1 if not found
+    return hash >= 0 ? hash : hash + size; // Ensure the hash is non-negative
 }
 
 // ==== readFromFile ===========================================================
@@ -70,7 +54,9 @@ void ProfessorTable::readFromFile(const string& filename) {
         return;
     }
 
-    string name, courseID, line;
+    string name;
+    string courseID;
+    string line;
     double rating;
 
     // Read the file line by line
@@ -126,14 +112,16 @@ void ProfessorTable::insert(const string& profName, const string& courseID, doub
     Professor newEntry = {profName, {courseID}, rating};
     profTable[index].push_back(newEntry);           // Add to the chain
 
-    // Update the courseTable
-    int courseIndex = findCourseIndex(courseID);    // Find the course in courseTable
-    if (courseIndex == -1) {                        // If course does not exist
-        Course newCourse = {courseID, {{profName, rating}}};
-        courseTable.push_back(newCourse);           // Add a new course entry
-    } else {                                        // If course exists, update it
-        courseTable[courseIndex].profs.push_back({profName, rating});
+    index = hashFunction(courseID);
+    for (auto& entry : courseTable[index]) {
+        if (entry.courseID == courseID) {
+            entry.profs.push_back(make_pair(profName, rating));
+            return;
+        }
     }
+
+    Course newEntry2 = {courseID, {{profName, rating}}};
+    courseTable[index].push_back(newEntry2);
 }
 
 // ==== display ================================================================
@@ -169,7 +157,6 @@ void ProfessorTable::display() const {
 // - If no professor is found, check the courseTable for matching courses.
 // =============================================================================
 void ProfessorTable::search(string& key) const {
-    system("clear");
     int index = hashFunction(key);                  // Compute the hash index
 
     // Search for the professor in the chain
@@ -180,20 +167,21 @@ void ProfessorTable::search(string& key) const {
                 cout << course << "\n";
             }
             cout << "Rating: " << prof.rating << "\n";
+            cout << endl;
             return;
         }
     }
 
-    // Search for the course in the course table
-    int courseIndex = findCourseIndex(key);
-    if (courseIndex != -1) {                        // If course is found
-        cout << "\nCourse: " << key << "\n";
-        cout << "Professors teaching this course:\n";
-        for (const auto& [profName, rating] : courseTable[courseIndex].profs) {
-            cout << "  Professor: " << profName << "\n";
-            cout << "  Rating: " << rating << "\n";
+    for (const auto& course : courseTable[index]) {
+        if (course.courseID == key) {
+            cout << "\nCourse: " << course.courseID << "\n";
+            cout << "Professors teaching this course:\n";
+            for (const auto& profName : course.profs) {
+                cout << profName.first << ", " << profName.second << endl;
+            }
+            cout << endl;
+            return;
         }
-        return;
     }
 
     cout << "No course or professor found.\n";      // If neither found, display message

@@ -51,14 +51,14 @@ void checkChoice(StudentTable& studentTable) {
 }
 
 void searchChoice(ProfessorTable& hashTable) {
-    string profName;
-    hashTable.display();
+    string input;
+    //hashTable.display();
 
-    cout << "Enter professor's name: ";
+    cout << "Enter either the course ID or professor's name: ";
     cin.ignore();
-    getline(cin, profName);
+    getline(cin, input);
 
-    hashTable.search(profName);
+    hashTable.search(input);
 }
 
 void rateProf(StudentTable& studentTable){
